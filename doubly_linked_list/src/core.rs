@@ -122,6 +122,15 @@ impl<T> DoublyLinkedList<T> {
         Some(&head.element)
     }
 
+    pub fn front_mut(&mut self) -> Option<&mut T> {
+        if self.len() == 0 {
+            return None;
+        }
+
+        let head = unsafe { self.head.unwrap().as_mut() };
+        Some(&mut head.element)
+    }
+
     pub fn back(&self) -> Option<&T> {
         if self.len() == 0 {
             return None;
@@ -129,6 +138,15 @@ impl<T> DoublyLinkedList<T> {
 
         let tail = unsafe { self.tail.unwrap().as_ref() };
         Some(&tail.element)
+    }
+
+    pub fn back_mut(&mut self) -> Option<&mut T> {
+        if self.len() == 0 {
+            return None;
+        }
+
+        let tail = unsafe { self.tail.unwrap().as_mut() };
+        Some(&mut tail.element)
     }
 }
 
@@ -186,5 +204,16 @@ mod core_tests {
         assert_eq!(l.len(), 1);
         assert_eq!(l.front(), Some(&1));
         assert_eq!(l.back(), Some(&1));
+    }
+
+    #[test]
+    fn test_front_mut() {
+        let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+        l.push_back(1);
+        l.push_back(2);
+        l.front_mut().map(|x| *x = 3);
+        l.back_mut().map(|x| *x = 4);
+        assert_eq!(l.front_mut(), Some(&mut 3));
+        assert_eq!(l.back_mut(), Some(&mut 4));
     }
 }
