@@ -33,6 +33,13 @@ impl<T> DoublyLinkedList<T> {
         }
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut list = DoublyLinkedList::new();
+    /// assert_eq!(list.len(), 0);
+    /// list.push_front(1);
+    /// assert_eq!(list.len(), 1);
+    /// ```
     pub fn len(&self) -> usize {
         self.size
     }

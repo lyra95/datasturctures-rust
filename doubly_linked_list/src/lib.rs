@@ -1,2 +1,2 @@
-mod core;
-mod into_iterator;
+pub mod core;
+pub mod into_iterator;
