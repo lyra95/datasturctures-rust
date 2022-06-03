@@ -84,6 +84,10 @@ impl<T> DoublyLinkedList<T> {
         Some(old_tail.element)
     }
 
+    pub fn remove(&mut self, at: usize) -> T {
+        panic!("Not implemented yet");
+    }
+
     pub fn push_front(&mut self, element: T) {
         let mut new_head = Box::from(Node::new(element));
         new_head.next = self.head;
@@ -120,6 +124,22 @@ impl<T> DoublyLinkedList<T> {
         self.size += 1;
     }
 
+    pub fn insert_after(&mut self, element: T, i: usize) -> Result<(), String> {
+        if i > self.len() {
+            return Err(String::from("Index out of bounds"));
+        }
+
+        panic!("Not implemented");
+    }
+
+    pub fn insert_before(&mut self, element: T, i: usize) -> Result<(), String> {
+        if i > self.len() {
+            return Err(String::from("Index out of bounds"));
+        }
+
+        panic!("Not implemented");
+    }
+
     pub fn front(&self) -> Option<&T> {
         if self.len() == 0 {
             return None;
@@ -154,6 +174,14 @@ impl<T> DoublyLinkedList<T> {
 
         let tail = unsafe { self.tail.unwrap().as_mut() };
         Some(&mut tail.element)
+    }
+
+    pub fn get(&self, i: usize) -> Option<&T> {
+        panic!("Not implemented");
+    }
+
+    pub fn get_mut(&mut self, i: usize) -> Option<&mut T> {
+        panic!("Not implemented");
     }
 }
 
