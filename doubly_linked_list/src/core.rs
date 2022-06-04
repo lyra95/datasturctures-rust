@@ -109,8 +109,51 @@ impl<T> DoublyLinkedList<T> {
         Some(old_tail.element)
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// l.push_back(1);
+    /// l.push_back(2);
+    /// l.push_back(3);
+    /// assert_eq!(l.remove(1), 2);
+    /// assert_eq!(l.remove(1), 3);
+    /// assert_eq!(l.remove(0), 1);
+    /// assert_eq!(l.len(), 0);
+    /// assert_eq!(l.front(), None);
+    /// assert_eq!(l.back(), None);
+    /// ```
     pub fn remove(&mut self, at: usize) -> T {
-        panic!("Not implemented yet");
+        let mut at = at;
+
+        if at >= self.len() {
+            panic!("index out of bounds");
+        }
+
+        if at == 0 {
+            return self.pop_front().unwrap();
+        }
+
+        if at == self.len() - 1 {
+            return self.pop_back().unwrap();
+        }
+
+        let mut current = self.head.unwrap();
+        while at > 0 {
+            current = unsafe { current.as_ref().next.unwrap() };
+            at -= 1;
+        }
+
+        let mut prev = unsafe { current.as_ref().prev.unwrap() };
+        let mut next = unsafe { current.as_ref().next.unwrap() };
+
+        unsafe {
+            prev.as_mut().next = Some(next);
+            next.as_mut().prev = Some(prev);
+        }
+
+        self.size -= 1;
+        let poped = unsafe { Box::from_raw(current.as_ptr()) };
+        poped.element
     }
 
     /// ```
