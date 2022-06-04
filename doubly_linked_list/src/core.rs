@@ -49,6 +49,10 @@ impl<T> DoublyLinkedList<T> {
         self.size
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// ```
     /// use doubly_linked_list::core::DoublyLinkedList;
     /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
@@ -56,7 +60,7 @@ impl<T> DoublyLinkedList<T> {
     /// assert_eq!(l.pop_front(), Some(1));
     /// ```
     pub fn pop_front(&mut self) -> Option<T> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
 
@@ -86,7 +90,7 @@ impl<T> DoublyLinkedList<T> {
     /// assert_eq!(l.back(), Some(&1));
     /// ```
     pub fn pop_back(&mut self) -> Option<T> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
 
@@ -178,7 +182,7 @@ impl<T> DoublyLinkedList<T> {
     }
 
     pub fn front(&self) -> Option<&T> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
 
@@ -197,7 +201,7 @@ impl<T> DoublyLinkedList<T> {
     /// assert_eq!(l.back_mut(), Some(&mut 4));
     /// ```
     pub fn front_mut(&mut self) -> Option<&mut T> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
 
@@ -206,7 +210,7 @@ impl<T> DoublyLinkedList<T> {
     }
 
     pub fn back(&self) -> Option<&T> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
 
@@ -215,7 +219,7 @@ impl<T> DoublyLinkedList<T> {
     }
 
     pub fn back_mut(&mut self) -> Option<&mut T> {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
 
@@ -235,5 +239,11 @@ impl<T> DoublyLinkedList<T> {
 impl<T> Drop for DoublyLinkedList<T> {
     fn drop(&mut self) {
         while self.pop_front().is_some() {}
+    }
+}
+
+impl<T> Default for DoublyLinkedList<T> {
+    fn default() -> Self {
+        DoublyLinkedList::new()
     }
 }
