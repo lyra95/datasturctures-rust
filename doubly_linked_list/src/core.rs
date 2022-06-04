@@ -322,12 +322,36 @@ impl<T> DoublyLinkedList<T> {
         Some(&mut tail.element)
     }
 
-    pub fn get(&self, i: usize) -> Option<&T> {
-        panic!("Not implemented");
+    pub fn get(&self, at: usize) -> Option<&T> {
+        if at >= self.len() {
+            return None;
+        }
+
+        let mut current = self.head.unwrap();
+        let mut at = at;
+
+        while at > 0 {
+            current = unsafe { current.as_ref().next.unwrap() };
+            at -= 1;
+        }
+
+        Some(unsafe { &current.as_ref().element })
     }
 
-    pub fn get_mut(&mut self, i: usize) -> Option<&mut T> {
-        panic!("Not implemented");
+    pub fn get_mut(&mut self, at: usize) -> Option<&mut T> {
+        if at >= self.len() {
+            return None;
+        }
+
+        let mut current = self.head.unwrap();
+        let mut at = at;
+
+        while at > 0 {
+            current = unsafe { current.as_mut().next.unwrap() };
+            at -= 1;
+        }
+
+        Some(unsafe { &mut current.as_mut().element })
     }
 }
 
