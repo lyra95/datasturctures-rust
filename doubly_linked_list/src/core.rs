@@ -25,6 +25,11 @@ impl<T> Node<T> {
 }
 
 impl<T> DoublyLinkedList<T> {
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// assert_eq!(l.len(), 0);
+    /// ```
     pub fn new() -> Self {
         DoublyLinkedList {
             size: 0,
@@ -44,6 +49,12 @@ impl<T> DoublyLinkedList<T> {
         self.size
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// l.push_back(1);
+    /// assert_eq!(l.pop_front(), Some(1));
+    /// ```
     pub fn pop_front(&mut self) -> Option<T> {
         if self.len() == 0 {
             return None;
@@ -64,6 +75,16 @@ impl<T> DoublyLinkedList<T> {
         Some(old_head.element)
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// l.push_back(1);
+    /// l.push_back(2);
+    /// assert_eq!(l.pop_back(), Some(2));
+    /// assert_eq!(l.len(), 1);
+    /// assert_eq!(l.front(), Some(&1));
+    /// assert_eq!(l.back(), Some(&1));
+    /// ```
     pub fn pop_back(&mut self) -> Option<T> {
         if self.len() == 0 {
             return None;
@@ -88,6 +109,14 @@ impl<T> DoublyLinkedList<T> {
         panic!("Not implemented yet");
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// l.push_front(1);
+    /// assert_eq!(l.len(), 1);
+    /// assert_eq!(l.front(), Some(&1));
+    /// assert_eq!(l.back(), Some(&1));
+    /// ```
     pub fn push_front(&mut self, element: T) {
         let mut new_head = Box::from(Node::new(element));
         new_head.next = self.head;
@@ -106,6 +135,14 @@ impl<T> DoublyLinkedList<T> {
         self.size += 1;
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// l.push_back(1);
+    /// assert_eq!(l.len(), 1);
+    /// assert_eq!(l.front(), Some(&1));
+    /// assert_eq!(l.back(), Some(&1));
+    /// ```
     pub fn push_back(&mut self, element: T) {
         let mut new_tail = Box::from(Node::new(element));
         new_tail.prev = self.tail;
@@ -149,6 +186,16 @@ impl<T> DoublyLinkedList<T> {
         Some(&head.element)
     }
 
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
+    /// l.push_back(1);
+    /// l.push_back(2);
+    /// l.front_mut().map(|x| *x = 3);
+    /// l.back_mut().map(|x| *x = 4);
+    /// assert_eq!(l.front_mut(), Some(&mut 3));
+    /// assert_eq!(l.back_mut(), Some(&mut 4));
+    /// ```
     pub fn front_mut(&mut self) -> Option<&mut T> {
         if self.len() == 0 {
             return None;
@@ -188,67 +235,5 @@ impl<T> DoublyLinkedList<T> {
 impl<T> Drop for DoublyLinkedList<T> {
     fn drop(&mut self) {
         while self.pop_front().is_some() {}
-    }
-}
-
-#[cfg(test)]
-mod core_tests {
-    use crate::core::DoublyLinkedList;
-
-    #[test]
-    fn test_new() {
-        let l: DoublyLinkedList<i32> = DoublyLinkedList::new();
-        assert_eq!(l.len(), 0);
-    }
-
-    #[test]
-    fn test_push_front() {
-        let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
-        l.push_front(1);
-        assert_eq!(l.len(), 1);
-        assert_eq!(l.front(), Some(&1));
-        assert_eq!(l.back(), Some(&1));
-    }
-
-    #[test]
-    fn test_push_back() {
-        let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
-        l.push_back(1);
-        assert_eq!(l.len(), 1);
-        assert_eq!(l.front(), Some(&1));
-        assert_eq!(l.back(), Some(&1));
-    }
-
-    #[test]
-    fn test_pop_front() {
-        let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
-        l.push_back(1);
-        l.push_back(2);
-        assert_eq!(l.pop_front(), Some(1));
-        assert_eq!(l.len(), 1);
-        assert_eq!(l.front(), Some(&2));
-        assert_eq!(l.back(), Some(&2));
-    }
-
-    #[test]
-    fn test_pop_back() {
-        let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
-        l.push_back(1);
-        l.push_back(2);
-        assert_eq!(l.pop_back(), Some(2));
-        assert_eq!(l.len(), 1);
-        assert_eq!(l.front(), Some(&1));
-        assert_eq!(l.back(), Some(&1));
-    }
-
-    #[test]
-    fn test_front_mut() {
-        let mut l: DoublyLinkedList<i32> = DoublyLinkedList::new();
-        l.push_back(1);
-        l.push_back(2);
-        l.front_mut().map(|x| *x = 3);
-        l.back_mut().map(|x| *x = 4);
-        assert_eq!(l.front_mut(), Some(&mut 3));
-        assert_eq!(l.back_mut(), Some(&mut 4));
     }
 }
