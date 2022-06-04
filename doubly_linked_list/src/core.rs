@@ -208,20 +208,72 @@ impl<T> DoublyLinkedList<T> {
         self.size += 1;
     }
 
-    pub fn insert_after(&mut self, element: T, i: usize) -> Result<(), String> {
-        if i > self.len() {
-            return Err(String::from("Index out of bounds"));
+    /// ```
+    /// use doubly_linked_list::core::DoublyLinkedList;
+    /// let mut l: DoublyLinkedList<i32> = DoublyLinkedList::from([1,2,4]);
+    /// l.insert_after(1,3);
+    /// assert_eq!(l.len(), 4);
+    /// ```
+    pub fn insert_after(&mut self, at: usize, element: T) {
+        if at >= self.len() {
+            panic!("Index out of bounds");
         }
 
-        panic!("Not implemented");
+        if at == self.len() - 1 {
+            self.push_back(element);
+            return;
+        }
+
+        let mut current = self.head.unwrap();
+        let mut at = at;
+
+        while at > 0 {
+            current = unsafe { current.as_ref().next.unwrap() };
+            at -= 1;
+        }
+
+        let mut node = NonNull::from(Box::leak(Box::from(Node::new(element))));
+        let mut next = unsafe { current.as_ref().next.unwrap() };
+
+        unsafe {
+            next.as_mut().prev = Some(node);
+            node.as_mut().next = Some(next);
+            current.as_mut().next = Some(node);
+            node.as_mut().prev = Some(current);
+        }
+
+        self.size += 1;
     }
 
-    pub fn insert_before(&mut self, element: T, i: usize) -> Result<(), String> {
-        if i > self.len() {
-            return Err(String::from("Index out of bounds"));
+    pub fn insert_before(&mut self, element: T, at: usize) {
+        if at >= self.len() {
+            panic!("Index out of bounds");
         }
 
-        panic!("Not implemented");
+        if at == 0 {
+            self.push_front(element);
+            return;
+        }
+
+        let mut at = at;
+        let mut current = self.head.unwrap();
+        while at > 0 {
+            current = unsafe { current.as_ref().next.unwrap() };
+            at -= 1;
+        }
+
+        let mut node = NonNull::from(Box::leak(Box::from(Node::new(element))));
+
+        let mut prev = unsafe { current.as_ref().prev.unwrap() };
+
+        unsafe {
+            prev.as_mut().next = Some(node);
+            node.as_mut().prev = Some(prev);
+            node.as_mut().next = Some(current);
+            current.as_mut().prev = Some(node);
+        }
+
+        self.size += 1;
     }
 
     pub fn front(&self) -> Option<&T> {
